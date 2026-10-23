@@ -45,6 +45,8 @@ const credentials = {
 const now = new Date()
 const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 1000
 const atHour = hour => Math.floor(midnight) + hour * 3600
+// The host sends the browser-local UTC offset; CI runs in UTC, so never hardcode UTC+8.
+const tzOffset = -new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0, 0).getTimezoneOffset() * 60
 const json = body => new Response(JSON.stringify(body), {
   status: 200,
   headers: { 'content-type': 'application/json' },
@@ -71,7 +73,7 @@ globalThis.fetch = async (url, init) => {
     calls.amount += 1
     if (upstreamMode === 'bad-token') return json({ code: '40002', data: { biz_code: 40002, biz_msg: 'expired' } })
     assert.match(text, /bucket=3600/)
-    assert.match(text, /tz=28800/)
+    assert.match(text, new RegExp(`[?&]tz=${tzOffset}(?:&|$)`))
     return json({
       code: 0,
       data: {
