@@ -78,3 +78,9 @@ pnpm dsh plugin --profile web add \
 - 中文沟通；先结论后细节；改完给出可执行的安装/重启命令；
 - 一个逻辑改动一个 commit，信息用中文并带前缀（`feat:` / `fix:` / `docs:` / `chore:` / `refactor:`）；
 - 任何涉及“删配置字段、改 row id、改包名”的改动，必须先向用户说明影响并确认。
+
+## 文档与文案（简洁优先）
+
+- **README**：只保留必要内容——定位、组件表、安装、使用、兼容性、License；机制/坑/流程放 `.docs/DEVELOPMENT.md`，不复述。
+- **commit message**：标题一行说清改了什么（≤ 50 字），正文最多 2–3 条必要说明，不复述 diff。
+- **release note**：只写变更点、升级方式（有变化时）、校验和；不重复 README。
