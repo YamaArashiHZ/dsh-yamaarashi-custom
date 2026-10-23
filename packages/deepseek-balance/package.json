@@ -1,6 +1,6 @@
 {
   "name": "@yamaarashihz/dsh-yamaarashi-deepseek-balance",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "DeepSeek usage card: a sidebar card showing a custom DeepSeek account's balance and today's hourly spend",
   "license": "MIT",

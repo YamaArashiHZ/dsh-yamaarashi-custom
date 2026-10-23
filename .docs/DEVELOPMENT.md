@@ -17,7 +17,7 @@
 
 ```
 dsh-yamaarashi-custom/
-├── package.json                           组件包 1：@yamaarashihz/dsh-yamaarashi-dafeiyu 0.3.0（大肥鱼探头）
+├── package.json                           组件包 1：@yamaarashihz/dsh-yamaarashi-dafeiyu 0.3.1（大肥鱼探头）
 ├── src/index.ts                           host Config（schema、默认值、volatile）
 ├── src/client/                            客户端 bundle 源码（背景层、设置页、锚点）
 ├── locale/{zh,en}.json                    组件显示名 / 描述
@@ -25,9 +25,11 @@ dsh-yamaarashi-custom/
 ├── scripts/embed-assets.mjs               资源 → src/client/generated/assets.ts
 ├── tsdown.config.ts                       DSH 客户端 bundle 协议（banner/footer）
 ├── README.md / AGENTS.md / LICENSE
+├── tests/                                 回归脚本（npm test；CI 也跑）
+├── .github/workflows/ci.yml               GitHub Actions
 ├── AGENTS.local.md                        本机环境补充（.gitignore 忽略，不入库）
 ├── .docs/DEVELOPMENT.md（本文件）、.docs/HANDOFF.md（本机历史文档，不入库）
-├── packages/deepseek-balance/             组件包 2：@yamaarashihz/dsh-yamaarashi-deepseek-balance 0.2.0（DeepSeek 用量卡片）
+├── packages/deepseek-balance/             组件包 2：@yamaarashihz/dsh-yamaarashi-deepseek-balance 0.2.1（DeepSeek 用量卡片）
 │   ├── package.json / tsconfig.json / tsdown.config.ts
 │   ├── src/index.ts                       host Config + 同源路由（余额 / 今日分时用量 / 凭证）
 │   ├── src/shared.ts                      host/client 共享类型与常量
@@ -35,7 +37,7 @@ dsh-yamaarashi-custom/
 │   ├── src/client/                        侧栏卡片（DOM 注入 + portal + SVG 图）+ 行配置页
 │   ├── locale/{zh,en}.json                组件显示名 / 描述
 │   └── assets/deepseek-balance.svg        组件行图标
-└── bundle/                                插件壳：@yamaarashihz/dsh-yamaarashi-custom 0.9.0
+└── bundle/                                插件壳：@yamaarashihz/dsh-yamaarashi-custom 0.9.1
     ├── package.json                       dsh.bundle.patch、icon、engines
     ├── cordis.patch.yml                   一行一个组件（scroll）
     ├── locale/{zh,en}.json                插件整体名
@@ -96,7 +98,7 @@ dsh-yamaarashi-custom/
 ```jsonc
 {
   "name": "@yamaarashihz/dsh-yamaarashi-dafeiyu",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "icon": "assets/mascot-512.webp",
   "type": "module",
@@ -237,11 +239,12 @@ npm pack               # 大肥鱼组件包 → yamaarashihz-dsh-yamaarashi-dafe
 npm run pack:balance   # 用量卡片 → packages/deepseek-balance/yamaarashihz-dsh-yamaarashi-deepseek-balance-<ver>.tgz
 npm run pack:bundle    # 壳 → bundle/yamaarashihz-dsh-yamaarashi-custom-<ver>.tgz
 npm run pack:all       # 三个一起
+npm test               # 回归（需先 build 两个包）
 ```
 
 - `npm pack` 前确认 `files` 只含需要的东西（不打包源码、`.temp`、旧 tgz）。
 - 打包后检查 tgz：组件包含 `lib/`、`locale/`、`assets/`；壳包含 `cordis.patch.yml`、`locale/`、`assets/`。
-- 工作区不是 git 仓库；旧 tgz 保留在仓库根（profile 可能仍引用旧路径），不要随意删除。
+- 仓库已接入 git（GitHub）；旧 tgz 保留在仓库根但不入库（profile 可能仍引用旧路径），不要随意删除。
 
 ---
 
@@ -257,6 +260,7 @@ pnpm dsh plugin --profile web add \
 ```
 
 - 组件包没有 `dsh.bundle`，`dsh plugin add` 会输出一次 "not a bundle" 警告，**正常**。
+- 也可以直接装 GitHub Release 里的 tgz（`https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v<ver>/<asset>.tgz`），URL 形式与本地 tgz 等价。
 - 需要**重启 host**：新增/删除 row、row 的模块名变化、组件包版本变化（新依赖）、host schema 变化。
   仅 `lib/client.js` 变化：刷新页面或等 HMR。
 - 卸载（两个一起）：
@@ -284,16 +288,17 @@ pnpm dsh plugin --profile web add \
 
 ## 9. 测试与验收
 
-- 现有回归：`.temp/smoke-v090.mjs`（0.9.0 壳 + 大肥鱼 + 两个组件元数据）、`.temp/smoke-balance.mjs`
-  （用量卡片 client：协议/slot/DOM 注入/portal/图表/配置页）、`.temp/shell-check.mjs`（壳行与 locale）、
-  `.temp/host-check.mjs`（真实本地 HTTP server + 假凭据/上游，验证 host 路由与数据归一化）。覆盖：
+- 回归脚本在 `tests/`，一条 `npm test` 跑全部（需先 build 两个包）：`tests/shell-check.mjs`（壳 patch 行 / locale / 图标 / 版本）、
+  `tests/host-check.mjs`（真实本地 HTTP server + 假凭据/上游，验证 host 路由与数据归一化）、
+  `tests/smoke-mascot.mjs`（大肥鱼 jsdom：协议 / slot / 背景层 / 配置页 / 元数据）、
+  `tests/smoke-balance.mjs`（用量卡片：协议/slot/DOM 注入/portal/图表/配置页）。覆盖：
   bundle 协议 id、slot 注册（含 `plugins.row.config` key、`whileServed`）、`view summary/page`、
   背景层定位与透明规则、跨主视图保持、侧栏变化、配置实时更新、启用/禁用与卸载清理、设置页结构、
   双包元数据（locale 标题、壳 patch 行、图标）。
-- 新增/修改组件后：复制该文件改名（如 `smoke-v090.mjs`）并补对应断言，保留旧文件不删。
+- 新增/修改组件后：在 `tests/` 补对应断言；**改版本号时同步 `tests/` 里的版本断言**（否则 CI 会红）。历史 smoke 脚本保留在本地 `.temp/`（不入库）。
 - 打包后额外检查：`tar -tzf` 内容、`sha256sum`、组件 tgz 的 host 模块可被 Node import、客户端 banner id 正确。
 - 浏览器验收（用户操作）：插件列表名、组件行名、行配置入口、滑条实时生效、所有主视图背景、无控制台报错。
-- 测试文件放 `.temp/`，不要进 tgz。
+- 测试文件放 `tests/`（入库，CI 跑）；不要进 tgz。CI：`.github/workflows/ci.yml`（typecheck / build / test / pack dry-run）。
 
 ---
 
@@ -331,7 +336,8 @@ pnpm dsh plugin --profile web add \
 | 0.7.0 + 组件 0.1.0（新增） | 壳 + 两个组件包 | 新增「DeepSeek 用量卡片」（`packages/deepseek-balance`，row id `deepseek-balance`）：host 凭据路由 + 侧栏 DOM 注入卡片 + 行配置页；大肥鱼不变 |
 | 0.7.0 + 组件 0.1.1 | 外观微调 | 组件行图标改为纯直方图；卡片标题行去掉品牌图标，只保留文字标题 |
 | 0.8.0 + 组件 0.2.0 | row id 改名 | 大肥鱼 row id `yamaarashi-custom` → `dafeiyu`（0.7.x 及以前的旧行配置不自动迁移，回落到 schema 默认值）；组件包内容仅 id 常量与提示文案；已安装用户需重装 tgz 并重启 host |
-| 0.9.0 + 组件 0.3.0/0.2.0（当前） | 包名改名 | 组件包统一改为 `@yamaarashihz/dsh-yamaarashi-<组件>`（`dsh-dafeiyu` → `dsh-yamaarashi-dafeiyu`，`dsh-deepseek-balance` → `dsh-yamaarashi-deepseek-balance`）；tsdown `id`、壳 patch 裸包名、文档与冒烟同步；row id/配置字段/显示名不变；升级需从 profile 卸载旧包名、装新包名，并改 profile 覆盖行的 `name:` |
+| 0.9.0 + 组件 0.3.0/0.2.0 | 包名改名 | 组件包统一改为 `@yamaarashihz/dsh-yamaarashi-<组件>`（`dsh-dafeiyu` → `dsh-yamaarashi-dafeiyu`，`dsh-deepseek-balance` → `dsh-yamaarashi-deepseek-balance`）；tsdown `id`、壳 patch 裸包名、文档与冒烟同步；row id/配置字段/显示名不变；升级需从 profile 卸载旧包名、装新包名，并改 profile 覆盖行的 `name:` |
+| 0.9.1 + 组件 0.3.1/0.2.1（当前） | 发版与 CI | 各包目录内附 LICENSE（tgz 自带）；README 增加 Release 安装；回归脚本迁到 `tests/` 并新增 GitHub Actions；安装/使用行为无变化 |
 
 ## 12. 参考资料（本机 DSH 检出）
 

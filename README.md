@@ -1,5 +1,7 @@
 # DSH 个性化定制（dsh-yamaarashi-custom）
 
+[![CI](https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/actions/workflows/ci.yml/badge.svg)](https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/actions/workflows/ci.yml)
+
 > A customization suite for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness): a bundle shell plus independent component packages.
 
 个人维护的 DSH 个性化插件，采用「**插件壳 + 组件包**」结构：壳只负责插件整体名/图标与组件列表，每个组件是一个独立 npm 包。非官方项目，与 DeepSeek 官方无关。
@@ -16,21 +18,35 @@ DSH 的「插件名」（bundle）与「包含的组件」行名（row）分别�
 
 更完整的机制依据、目录规范与已知坑见 [`.docs/DEVELOPMENT.md`](.docs/DEVELOPMENT.md)。
 
-## 安装（当前：本地 tgz）
+## 安装
 
 要求 DSH `0.2.1-rc.x`（Web GUI）。三个包必须**一起装**：壳 + 两个组件包（组件包是 profile 的直接依赖，对应 row 的模块才解析得到）。
+
+### 从 Release 安装（推荐）
 
 ```sh
 cd <DSH 源码检出>
 pnpm dsh plugin --profile web add \
-  <仓库根>/bundle/yamaarashihz-dsh-yamaarashi-custom-0.9.0.tgz \
-  <仓库根>/yamaarashihz-dsh-yamaarashi-dafeiyu-0.3.0.tgz \
-  <仓库根>/packages/deepseek-balance/yamaarashihz-dsh-yamaarashi-deepseek-balance-0.2.0.tgz
+  https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v0.9.1/yamaarashihz-dsh-yamaarashi-custom-0.9.1.tgz \
+  https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v0.9.1/yamaarashihz-dsh-yamaarashi-dafeiyu-0.3.1.tgz \
+  https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v0.9.1/yamaarashihz-dsh-yamaarashi-deepseek-balance-0.2.1.tgz
 # 新增 row / 模块名变化 / host schema 变化 → 重启 host
 ```
 
+### 从本地 tgz 安装
+
+在 [Releases](https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases) 页下载三个 tgz 后：
+
+```sh
+cd <DSH 源码检出>
+pnpm dsh plugin --profile web add \
+  <下载目录>/yamaarashihz-dsh-yamaarashi-custom-0.9.1.tgz \
+  <下载目录>/yamaarashihz-dsh-yamaarashi-dafeiyu-0.3.1.tgz \
+  <下载目录>/yamaarashihz-dsh-yamaarashi-deepseek-balance-0.2.1.tgz
+```
+
 - 组件包没有 `dsh.bundle`，`dsh plugin add` 会对它输出一句 “not a bundle” 的一次性警告 —— **正常**：它作为普通依赖安装，不会在「已安装插件」里单独出现。
-- npm 包尚未发布，目前只提供 tgz。
+- npm 包尚未发布，目前通过 GitHub Release 分发 tgz。
 
 卸载：
 
@@ -78,6 +94,7 @@ npm install
 npm run typecheck          # 类型检查
 npm run build              # assets → tsc → tsdown（大肥鱼组件包）
 npm run build:balance      # 第二个组件包：tsc + tsdown
+npm test                   # 回归：壳元数据 + 大肥鱼 jsdom + 用量卡片 jsdom/host
 npm pack                   # 大肥鱼组件包 tgz
 npm run pack:balance       # 用量卡片 tgz
 npm run pack:bundle        # 壳 tgz
@@ -85,7 +102,7 @@ npm run pack:all           # 一次打三个
 ```
 
 - 客户端 bundle 走 DSH 协议（`window.__ModuleLoader__.load`），只允许平台模块作为 external；不能 import CSS / 图片（图片走生成的 data URL 模块）。
-- 冒烟脚本在 `.temp/`（不入库），回归项：bundle 协议 id、slot 注册、背景层几何与透明规则、配置页、host 路由与数据归一化。
+- 回归脚本在 `tests/`（`npm test`），CI（GitHub Actions）在每次 push / PR 时跑 typecheck、build、test 与三个包的 `npm pack --dry-run`。
 - 开发规则见 [`AGENTS.md`](AGENTS.md)，完整规范见 [`.docs/DEVELOPMENT.md`](.docs/DEVELOPMENT.md)。
 
 ## 目录结构
@@ -94,6 +111,8 @@ npm run pack:all           # 一次打三个
 bundle/                     插件壳：cordis.patch.yml + locale + 图标
 src/                        大肥鱼组件包：host Config + 客户端 bundle 源码
 packages/deepseek-balance/  DeepSeek 用量卡片组件包
+tests/                      回归脚本（npm test）
+.github/workflows/ci.yml    CI
 .docs/DEVELOPMENT.md        开发规范（权威）
 AGENTS.md                   DSH 自动加载的项目规则
 ```

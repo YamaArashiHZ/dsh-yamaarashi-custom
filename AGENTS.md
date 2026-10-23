@@ -46,15 +46,15 @@ cd <仓库根>
 npm install                 # 首次
 npm run typecheck           # 改完先类型检查
 npm run build               # assets → tsc → tsdown
-node .temp/smoke-v090.mjs   # jsdom 回归（大肥鱼 + 两个组件元数据）
-node .temp/smoke-balance.mjs # 用量卡片 client 回归（slot / DOM 注入 / 卡片 / 配置页）
-node .temp/host-check.mjs    # 用量卡片 host 路由 + 数据归一化
-npm pack                    # 大肥鱼组件包 tgz
 npm run build:balance       # DeepSeek 用量卡片：tsc + tsdown
+npm test                    # 回归（tests/：壳元数据 + 大肥鱼 + 用量卡片 client/host）
+npm pack                    # 大肥鱼组件包 tgz
 npm run pack:balance        # DeepSeek 用量卡片 tgz
 npm run pack:bundle         # 壳 tgz（bundle/ 下）
 # 或 npm run pack:all 一次打三个
 ```
+
+CI（`.github/workflows/ci.yml`）在每次 push / PR 跑 typecheck、build、`npm test` 与三个包的 `npm pack --dry-run`；改版本号时要同步 `tests/` 里的版本断言。
 
 安装 / 升级（壳 + 各组件 tgz 必须一起装，每个组件包都是 profile 直接依赖）：
 

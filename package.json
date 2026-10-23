@@ -1,6 +1,6 @@
 {
   "name": "@yamaarashihz/dsh-yamaarashi-dafeiyu",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "Dafeiyu peek: a mascot wallpaper component for the DSH customization suite",
   "license": "MIT",
@@ -63,7 +63,8 @@
     "clean": "node -e \"require('node:fs').rmSync('lib',{recursive:true,force:true})\"",
     "build:balance": "cd packages/deepseek-balance && npm run build",
     "typecheck:balance": "cd packages/deepseek-balance && npm run typecheck",
-    "pack:balance": "cd packages/deepseek-balance && npm pack"
+    "pack:balance": "cd packages/deepseek-balance && npm pack",
+    "test": "node tests/shell-check.mjs && node tests/host-check.mjs && node tests/smoke-mascot.mjs && node tests/smoke-balance.mjs"
   },
   "dependencies": {
     "@deepseek-ai/schemastery": "3.18.5"
