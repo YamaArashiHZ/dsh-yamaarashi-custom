@@ -16,7 +16,7 @@ if (bundle.version !== '0.9.1') throw new Error('shell version should be 0.9.1')
 if (bundle.dsh?.bundle?.patch !== './cordis.patch.yml') throw new Error('shell has no bundle patch')
 
 const component = JSON.parse(read('packages/deepseek-balance/package.json'))
-if (component.version !== '0.2.1') throw new Error('component version should be 0.2.1')
+if (component.version !== '0.3.0') throw new Error('component version should be 0.3.0')
 if (component.dsh?.bundle !== undefined) throw new Error('component must not declare dsh.bundle')
 if (component.dsh?.client?.platform !== 'web') throw new Error('component must declare dsh.client.platform=web')
 for (const key of ['./client', './package.json', './locale/*.json']) {

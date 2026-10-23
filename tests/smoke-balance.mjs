@@ -224,6 +224,29 @@ assert.match(card.innerHTML, /url\(#ybc-bar-[A-Za-z0-9_-]+\)/)
 assert.ok(fetchCount >= 1, 'data fetched')
 console.log('OK card DOM insertion + render + chart')
 
+// ---- 6b) Middle-click opens the official usage dashboard (web UI) ----
+const opened = []
+const realOpen = dom.window.open
+dom.window.open = (...args) => { opened.push(args); return null }
+const middleEvent = (target, type) => target.dispatchEvent(new dom.window.MouseEvent(type, {
+  bubbles: true, cancelable: true, button: 1,
+}))
+const cardSurface = card.querySelector('.ybc-card')
+assert.ok(cardSurface, 'card surface')
+assert.equal(middleEvent(cardSurface, 'mousedown'), false, 'middle mousedown on the card is canceled (no autoscroll)')
+assert.equal(middleEvent(cardSurface, 'auxclick'), false, 'middle auxclick on the card is handled')
+assert.deepEqual(opened, [['https://platform.deepseek.com/usage', '_blank', 'noopener,noreferrer']],
+  'middle click opens the official usage dashboard in a new tab')
+const refreshButton = card.querySelector('.ybc-refresh')
+assert.ok(refreshButton, 'refresh button')
+assert.equal(middleEvent(refreshButton, 'mousedown'), true, 'refresh keeps its middle gesture')
+assert.equal(middleEvent(refreshButton, 'auxclick'), true, 'refresh middle click does not navigate')
+assert.equal(opened.length, 1, 'inner control does not open the dashboard')
+cardSurface.dispatchEvent(new dom.window.MouseEvent('auxclick', { bubbles: true, cancelable: true, button: 0 }))
+assert.equal(opened.length, 1, 'left click leaves no navigation')
+dom.window.open = realOpen
+console.log('OK middle-click opens the official usage dashboard (web)')
+
 // ---- 7) Disable removes the card and stylesheet ----
 configValue = { components: { balanceCard: { enabled: false, title: 'DeepSeek', refreshSeconds: 60, showBalance: true, showTodayUsage: true } } }
 for (const listener of listeners) listener()

@@ -15,6 +15,7 @@
  * @module @yamaarashihz/dsh-yamaarashi-deepseek-balance/client/card
  */
 
+import { useEffect, useRef } from 'react'
 import type { ReactElement } from 'react'
 import type { BalanceCardConfig, DataResponse, UsageSnapshot } from '../shared.js'
 import { DotIcon, RefreshIcon, UsageChart } from './chart.js'
@@ -22,6 +23,46 @@ import { useUsageData } from './data.js'
 
 /** Heading when the configured title is blank. */
 const FALLBACK_TITLE = 'DeepSeek'
+
+/** Official usage dashboard opened by a middle-click on the card (web UI only). */
+const OFFICIAL_USAGE_URL = 'https://platform.deepseek.com/usage'
+
+/** Elements inside the card that own their middle-click gesture. */
+const INTERACTIVE_SELECTOR = 'button, a, input, textarea, select, [role="button"], [role="switch"]'
+
+/**
+ * Whether a middle-click landed on an interactive element that keeps its own
+ * behavior (the refresh button today).
+ * @param target - event target of the pointer event.
+ * @returns true when the card must not claim the gesture.
+ */
+function isInteractiveTarget(target: EventTarget | null): boolean {
+  const element = target as Element | null
+  return element !== null
+    && typeof element.closest === 'function'
+    && element.closest(INTERACTIVE_SELECTOR) !== null
+}
+
+/**
+ * Cancel Chromium's middle-click autoscroll on the card surface so the
+ * `auxclick` that follows can open the dashboard instead of starting scroll.
+ * @param event - native mousedown inside the card.
+ */
+function suppressMiddleAutoscroll(event: MouseEvent): void {
+  if (event.button !== 1 || isInteractiveTarget(event.target)) return
+  event.preventDefault()
+}
+
+/**
+ * Middle-click the card (web UI only) opens the official usage dashboard in a
+ * new tab. Inner controls keep their own gesture; left click stays inert.
+ * @param event - native auxclick inside the card.
+ */
+function openOfficialUsage(event: MouseEvent): void {
+  if (event.button !== 1 || isInteractiveTarget(event.target)) return
+  event.preventDefault()
+  window.open(OFFICIAL_USAGE_URL, '_blank', 'noopener,noreferrer')
+}
 
 /** Availability dot state. */
 interface Availability {
@@ -187,6 +228,21 @@ export function UsageCard({ config }: { config: BalanceCardConfig }): ReactEleme
   // Hooks run before the disabled return: the card unmounts when disabled, but
   // keeping the order unconditional makes the component safe to reuse.
   const { data, error, loading, refresh } = useUsageData(config.enabled, config.refreshSeconds)
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  // Native listeners (not React's synthetic pair) keep the middle-click gesture
+  // attached to the card surface through the sidebar portal, and the mousedown
+  // cancel is what suppresses Chromium's autoscroll before `auxclick` arrives.
+  useEffect(() => {
+    const element = cardRef.current
+    if (element === null) return undefined
+    element.addEventListener('mousedown', suppressMiddleAutoscroll)
+    element.addEventListener('auxclick', openOfficialUsage)
+    return () => {
+      element.removeEventListener('mousedown', suppressMiddleAutoscroll)
+      element.removeEventListener('auxclick', openOfficialUsage)
+    }
+  }, [])
   if (!config.enabled) return null
 
   const title = config.title.trim().length > 0 ? config.title.trim() : FALLBACK_TITLE
@@ -201,7 +257,7 @@ export function UsageCard({ config }: { config: BalanceCardConfig }): ReactEleme
     )
 
   return (
-    <div className="ybc-card">
+    <div className="ybc-card" ref={cardRef}>
       <header className="ybc-head">
         <span className="ybc-brand">
           <span className="ybc-brand-name">{title}</span>

@@ -217,7 +217,7 @@ if (!patch.includes('id: deepseek-balance')) throw new Error('shell patch missin
 if (!patch.includes("name: '@yamaarashihz/dsh-yamaarashi-deepseek-balance'")) throw new Error('shell patch missing second row name')
 const balanceJson = JSON.parse(fs.readFileSync('packages/deepseek-balance/package.json', 'utf8'))
 if (balanceJson.name !== '@yamaarashihz/dsh-yamaarashi-deepseek-balance') throw new Error('second component name')
-if (balanceJson.version !== '0.2.1') throw new Error('second component version')
+if (balanceJson.version !== '0.3.0') throw new Error('second component version')
 if (balanceJson.dsh?.bundle !== undefined) throw new Error('second component must not declare dsh.bundle')
 if (balanceJson.dsh?.client?.platform !== 'web') throw new Error('second component dsh.client missing')
 console.log('OK package layout: shell bundle + two component packages')
