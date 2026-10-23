@@ -1,6 +1,6 @@
 {
   "name": "@yamaarashihz/dsh-yamaarashi-custom",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "private": true,
   "description": "Personal DeepSeek Harness customization suite: one bundle, one row per component package",
   "license": "MIT",

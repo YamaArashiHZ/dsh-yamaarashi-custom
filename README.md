@@ -17,9 +17,9 @@ DeepSeek Harness 个性化插件：插件壳 + 组件包。非官方项目，MIT
 ```sh
 cd <DSH 源码检出>
 pnpm dsh plugin --profile web add \
-  https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v0.9.1/yamaarashihz-dsh-yamaarashi-custom-0.9.1.tgz \
-  https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v0.9.1/yamaarashihz-dsh-yamaarashi-dafeiyu-0.3.1.tgz \
-  https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v0.9.1/yamaarashihz-dsh-yamaarashi-deepseek-balance-0.2.1.tgz
+  https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v0.9.2/yamaarashihz-dsh-yamaarashi-custom-0.9.2.tgz \
+  https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v0.9.2/yamaarashihz-dsh-yamaarashi-dafeiyu-0.3.1.tgz \
+  https://github.com/YamaArashiHZ/dsh-yamaarashi-custom/releases/download/v0.9.2/yamaarashihz-dsh-yamaarashi-deepseek-balance-0.3.0.tgz
 # 新增 row / 模块名变化 → 重启 host
 ```
 

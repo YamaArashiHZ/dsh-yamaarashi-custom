@@ -205,7 +205,7 @@ if (packageJson.version !== '0.3.1') throw new Error(`component version ${packag
 const componentZh = JSON.parse(fs.readFileSync('locale/zh.json', 'utf8'))
 if (componentZh.meta?.title !== '大肥鱼探头') throw new Error(`component zh title ${componentZh.meta?.title}`)
 if (bundleJson.name !== '@yamaarashihz/dsh-yamaarashi-custom') throw new Error('shell name')
-if (bundleJson.version !== '0.9.1') throw new Error(`shell version ${bundleJson.version}`)
+if (bundleJson.version !== '0.9.2') throw new Error(`shell version ${bundleJson.version}`)
 if (bundleJson.dsh?.bundle?.patch !== './cordis.patch.yml') throw new Error('shell patch missing')
 if (!bundleJson.files.includes('locale/*.json') || !bundleJson.files.includes('assets/mascot-512.webp')) throw new Error('shell files')
 const shellZh = JSON.parse(fs.readFileSync('bundle/locale/zh.json', 'utf8'))
@@ -222,4 +222,4 @@ if (balanceJson.dsh?.bundle !== undefined) throw new Error('second component mus
 if (balanceJson.dsh?.client?.platform !== 'web') throw new Error('second component dsh.client missing')
 console.log('OK package layout: shell bundle + two component packages')
 
-console.log('OK all 0.9.1 checks passed')
+console.log('OK all 0.9.2 checks passed')

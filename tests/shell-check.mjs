@@ -12,7 +12,7 @@ for (const [id, name] of [
   }
 }
 const bundle = JSON.parse(read('bundle/package.json'))
-if (bundle.version !== '0.9.1') throw new Error('shell version should be 0.9.1')
+if (bundle.version !== '0.9.2') throw new Error('shell version should be 0.9.2')
 if (bundle.dsh?.bundle?.patch !== './cordis.patch.yml') throw new Error('shell has no bundle patch')
 
 const component = JSON.parse(read('packages/deepseek-balance/package.json'))

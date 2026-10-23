@@ -37,7 +37,7 @@ dsh-yamaarashi-custom/
 │   ├── src/client/                        侧栏卡片（DOM 注入 + portal + SVG 图）+ 行配置页
 │   ├── locale/{zh,en}.json                组件显示名 / 描述
 │   └── assets/deepseek-balance.svg        组件行图标
-└── bundle/                                插件壳：@yamaarashihz/dsh-yamaarashi-custom 0.9.1
+└── bundle/                                插件壳：@yamaarashihz/dsh-yamaarashi-custom 0.9.2
     ├── package.json                       dsh.bundle.patch、icon、engines
     ├── cordis.patch.yml                   一行一个组件（scroll）
     ├── locale/{zh,en}.json                插件整体名
@@ -338,7 +338,8 @@ pnpm dsh plugin --profile web add \
 | 0.8.0 + 组件 0.2.0 | row id 改名 | 大肥鱼 row id `yamaarashi-custom` → `dafeiyu`（0.7.x 及以前的旧行配置不自动迁移，回落到 schema 默认值）；组件包内容仅 id 常量与提示文案；已安装用户需重装 tgz 并重启 host |
 | 0.9.0 + 组件 0.3.0/0.2.0 | 包名改名 | 组件包统一改为 `@yamaarashihz/dsh-yamaarashi-<组件>`（`dsh-dafeiyu` → `dsh-yamaarashi-dafeiyu`，`dsh-deepseek-balance` → `dsh-yamaarashi-deepseek-balance`）；tsdown `id`、壳 patch 裸包名、文档与冒烟同步；row id/配置字段/显示名不变；升级需从 profile 卸载旧包名、装新包名，并改 profile 覆盖行的 `name:` |
 | 0.9.1 + 组件 0.3.1/0.2.1 | 发版与 CI | 各包目录内附 LICENSE（tgz 自带）；README 增加 Release 安装；回归脚本迁到 `tests/` 并新增 GitHub Actions；安装/使用行为无变化 |
-| 0.9.1 + 组件 0.3.1/0.3.0（当前） | 用量卡片交互 | 卡片支持中键点击在新标签页打开官方用量页（web UI；mousedown 取消自动滚动，卡片内刷新按钮等控件不劫持手势） |
+| 0.9.1 + 组件 0.3.1/0.3.0 | 用量卡片交互 | 卡片支持中键点击在新标签页打开官方用量页（web UI；mousedown 取消自动滚动，卡片内刷新按钮等控件不劫持手势） |
+| 0.9.2 + 组件 0.3.1/0.3.0（当前） | 发版 | 壳仅版本号与 Release 资产更新；内容同 0.9.1 + 用量卡片 0.3.0 |
 
 ## 12. 参考资料（本机 DSH 检出）
 
