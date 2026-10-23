@@ -1,0 +1,39 @@
+{
+  "name": "@yamaarashihz/dsh-yamaarashi-custom",
+  "version": "0.9.0",
+  "private": true,
+  "description": "Personal DeepSeek Harness customization suite: one bundle, one row per component package",
+  "license": "MIT",
+  "author": "YamaArashiHZ",
+  "homepage": "https://github.com/YamaArashiHZ/dsh-yamaarashi-custom#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YamaArashiHZ/dsh-yamaarashi-custom.git",
+    "directory": "bundle"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "bundle",
+    "customization"
+  ],
+  "icon": "assets/mascot-512.webp",
+  "exports": {
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "cordis.patch.yml",
+    "locale/*.json",
+    "assets/mascot-512.webp"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "dsh": ">=0.2.1-rc.2 <0.3.0"
+  }
+}

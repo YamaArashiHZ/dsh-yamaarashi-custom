@@ -1,0 +1,25 @@
+# 依赖与构建产物
+node_modules/
+lib/
+src/client/generated/
+
+# 本地临时（冒烟脚本、测试输出、安装验证快照）
+.temp/
+
+# 打包产物（tgz 从不入库；profile 用绝对路径引用它们）
+*.tgz
+
+# 不随仓库分发的原图 / 中间产物
+.docs/assets/
+
+# 本机环境补充说明（DSH 仍会加载 AGENTS.md）
+AGENTS.local.md
+
+# 系统噪音
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# 作者本机的历史交接文档（不入库）
+.docs/HANDOFF.md

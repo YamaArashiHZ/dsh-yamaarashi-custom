@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="histogram-bar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6f9bff"/>
+      <stop offset="1" stop-color="#4d6bfe"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#histogram-bar)">
+    <rect x="20" y="70" width="18" height="34" rx="6"/>
+    <rect x="46" y="48" width="18" height="56" rx="6"/>
+    <rect x="72" y="60" width="18" height="44" rx="6"/>
+    <rect x="98" y="32" width="18" height="72" rx="6"/>
+  </g>
+  <line x1="14" y1="110" x2="120" y2="110" stroke="#4d6bfe" stroke-width="8" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,15 @@
+# The customization suite shell: one row per component package.
+#
+# - This package's Chinese display name comes from its own locale
+#   ("DSH 个性化定制"); it is what the Installed list and the bundle page show.
+# - Each row below points at a component package. The row's display name comes
+#   from THAT package's locale ("大肥鱼探头", "DeepSeek 用量卡片"), so the plugin
+#   name and the component names can differ.
+#
+# Adding a component: install its package next to this bundle, then append one
+# row here. The row id is stable and is that component's settings namespace.
+- insert:
+    - id: dafeiyu
+      name: '@yamaarashihz/dsh-yamaarashi-dafeiyu'
+    - id: deepseek-balance
+      name: '@yamaarashihz/dsh-yamaarashi-deepseek-balance'

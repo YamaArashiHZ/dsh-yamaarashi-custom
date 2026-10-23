@@ -1,0 +1,81 @@
+{
+  "name": "@yamaarashihz/dsh-yamaarashi-dafeiyu",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Dafeiyu peek: a mascot wallpaper component for the DSH customization suite",
+  "license": "MIT",
+  "author": "YamaArashiHZ",
+  "homepage": "https://github.com/YamaArashiHZ/dsh-yamaarashi-custom#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YamaArashiHZ/dsh-yamaarashi-custom.git"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "mascot",
+    "wallpaper",
+    "background"
+  ],
+  "icon": "assets/mascot-512.webp",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client*.js",
+    "lib/client*.js.map",
+    "lib/types/**/*.d.ts",
+    "assets/mascot-512.webp",
+    "locale/*.json"
+  ],
+  "dsh": {
+    "client": {
+      "platform": "web"
+    }
+  },
+  "engines": {
+    "dsh": ">=0.2.1-rc.2 <0.3.0",
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "scripts": {
+    "assets": "node scripts/embed-assets.mjs",
+    "typecheck": "npm run assets && tsc -p tsconfig.json --noEmit",
+    "build": "npm run assets && npm run clean && tsc -p tsconfig.json && tsdown",
+    "watch": "tsdown --watch",
+    "prepack": "npm run build",
+    "pack": "npm pack",
+    "pack:bundle": "cd bundle && npm pack",
+    "pack:all": "npm pack && npm run pack:bundle && npm run pack:balance",
+    "clean": "node -e \"require('node:fs').rmSync('lib',{recursive:true,force:true})\"",
+    "build:balance": "cd packages/deepseek-balance && npm run build",
+    "typecheck:balance": "cd packages/deepseek-balance && npm run typecheck",
+    "pack:balance": "cd packages/deepseek-balance && npm pack"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "3.18.5"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-client-ui-primitives": "0.2.1-rc.2",
+    "@types/node": "^24",
+    "@types/react": "^18",
+    "jsdom": "^30.1.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsdown": "^0.22.2",
+    "typescript": "^5"
+  }
+}
